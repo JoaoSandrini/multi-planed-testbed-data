@@ -7,12 +7,12 @@ from datetime import datetime, timedelta
 
 # File paths
 SET_FILES = {
-    "PolKA 1: VIT-RIO-SAO-MIA": "data/24h/24h-rj.csv",
-    "PolKA 2: VIT-BHZ-SAO-MIA": "data/24h/24h-bh.csv",
-    "PolKA 3: VIT-BHZ-RIO-SAO-MIA": "data/24h/24h-bh-rj.csv",
-    "IP: 17 Hops": "data/24h/24h-ip.csv",
+    "PolKA 1: VIT-RIO-SAO-MIA": "csv-data/24h-polka-1.csv",
+    "PolKA 2: VIT-BHZ-SAO-MIA": "csv-data/24h-polka-2.csv",
+    "PolKA 3: VIT-BHZ-RIO-SAO-MIA": "csv-data/24h-polka-3.csv",
+    "IP: 17 Hops": "csv-data/24h-ip.csv",
 }
-OUTPUT_FILE_REQ = "result-plots/phase1/http-times-over-time-24h.png"
+OUTPUT_FILE_REQ = "result-plots/24h-http-times.png"
 
 # Ensure output directory exists
 os.makedirs(os.path.dirname(OUTPUT_FILE_REQ), exist_ok=True)
@@ -82,28 +82,28 @@ for i, (label, filepath) in enumerate(SET_FILES.items()):
     
     ax = axes[i]
     ax.plot(hours_of_day, sorted_http_times, color=color_dict[label], alpha=0.7, linewidth=0.8)
-    ax.set_title(label, fontsize=14, fontweight='bold')
+    ax.set_title(label, fontsize=20, fontweight='bold')
     
     if i >= 2:  # Bottom row
-        ax.set_xlabel("Time (HH:MM)", fontsize=14)
+        ax.set_xlabel("Time (HH:MM)", fontsize=20)
     else:
         ax.set_xlabel("")  # Clear label
-    ax.set_ylabel("Response Time (ms)" if i % 2 == 0 else "", fontsize=14)
+    ax.set_ylabel("Response Time (ms)" if i % 2 == 0 else "", fontsize=20)
     ax.grid(True, linestyle=":", linewidth=0.5, alpha=0.7)
     ax.set_yticks(range(0, 1300, 200))
-    ax.set_yticklabels([f"{int(y)}" for y in ax.get_yticks()], fontsize=14)
+    ax.set_yticklabels([f"{int(y)}" for y in ax.get_yticks()], fontsize=18)
     ax.set_ylim(0, 1200)  # Set y-limit
     ax.set_xlim(0, 24)  # 24-hour period
     # Set x-axis ticks every 4 hours
     ax.set_xticks(range(0, 25, 4))
-    ax.set_xticklabels([f"{h:02d}:00" for h in range(0, 25, 4)], fontsize=14)
+    ax.set_xticklabels([f"{h:02d}:00" for h in range(0, 25, 4)], fontsize=18)
 
 # Remove unused axes if any
 for j in range(len(SET_FILES), len(axes)):
     fig.delaxes(axes[j])
 
-plt.suptitle("HTTP Response Time Over 24-Hour Period", fontsize=20, fontweight='bold')
-plt.tight_layout(rect=[0, 0.03, 1, 0.97])  # Adjust rect to make room for suptitle
+plt.suptitle("HTTP Response Time Over 24-Hour Period", fontsize=24, fontweight='bold')
+plt.tight_layout(rect=(0, 0.03, 1, 0.97))  # Adjust rect to make room for suptitle
 plt.savefig(OUTPUT_FILE_REQ, dpi=300)
 plt.close()
 

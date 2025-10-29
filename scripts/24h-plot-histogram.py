@@ -9,12 +9,12 @@ from matplotlib.patches import Patch
 
 # File paths
 SET_FILES = {
-    "IP: 17 Hops": "data/24h/24h-ip.csv",
-    "PolKA 1: VIT-RIO-SAO-MIA": "data/24h/24h-rj.csv",
-    "PolKA 2: VIT-BHZ-SAO-MIA": "data/24h/24h-bh.csv",
-    "PolKA 3: VIT-BHZ-RIO-SAO-MIA": "data/24h/24h-bh-rj.csv",
+    "IP: 17 Hops": "./csv-data/24h-ip.csv",
+    "PolKA 1: VIT-RIO-SAO-MIA": "./csv-data/24h-polka-1.csv",
+    "PolKA 2: VIT-BHZ-SAO-MIA": "./csv-data/24h-polka-2.csv",
+    "PolKA 3: VIT-BHZ-RIO-SAO-MIA": "./csv-data/24h-polka-3.csv",
 }
-OUTPUT_FILE = "result-plots/phase1/histogram-24h.png"
+OUTPUT_FILE = "result-plots/24h-histogram.png"
 
 # Ensure output directory exists
 os.makedirs(os.path.dirname(OUTPUT_FILE), exist_ok=True)
@@ -53,11 +53,11 @@ bin_count = freedman_diaconis_bins(df["Time"])
 sns.set(style="whitegrid")
 # Increase overall font sizes for tick labels, axes labels and titles
 # font_scale scales Seaborn's font sizes (works well with matplotlib)
-sns.set_context("notebook", font_scale=1.3)
+sns.set_context("notebook")
 fig, axes = plt.subplots(2, 2, figsize=(15, 10))
 
 # Add main title
-fig.suptitle("HTTP Response Time Density Curve per Path", fontsize=20, fontweight='bold')
+fig.suptitle("HTTP Response Time Density Curve per Path", fontsize=24, fontweight='bold')
 
 # Define the subplot positions for each dataset
 # Top row: PolKA 1, PolKA 2
@@ -75,6 +75,13 @@ for idx, (set_name, pos) in enumerate(zip(subplot_order, positions)):
     
     # Filter data for this specific dataset
     subset_data = df[df["Path"] == set_name]
+    # Remove non-positive values antes de usar escala log
+    subset_data = subset_data[subset_data["Time"] > 0]
+    if subset_data.empty:
+        ax.set_title(set_name + " (no positive values)", fontsize=20, fontweight='bold')
+        ax.set_xlabel("" if row == 0 else "Response Time (ms)")
+        ax.set_ylabel("" if col != 0 else "Probability Density")
+        continue
     
     # Create histogram for this subset
     sns.histplot(
@@ -90,34 +97,36 @@ for idx, (set_name, pos) in enumerate(zip(subplot_order, positions)):
     )
     
     # Set title to just the path name
-    ax.set_title(set_name, fontsize=14, fontweight='bold')
+    ax.set_title(set_name, fontsize=20, fontweight='bold')
     
     # Only add x-axis label for bottom row
     if row == 1:
-        ax.set_xlabel("Response Time (ms)", fontsize=14)
+        ax.set_xlabel("Response Time (ms)", fontsize=20)
     else:
         ax.set_xlabel("")
     
     # Only add y-axis label for left column
     if col == 0:
-        ax.set_ylabel("Probability Density", fontsize=14)
+        ax.set_ylabel("Probability Density", fontsize=20)
     else:
         ax.set_ylabel("")
     
     ax.set_yscale('log')
     ax.set_xscale('log')
 
-    # Make major tick labels bigger (minor ticks typically don't have labels)
-    ax.tick_params(axis='both', which='major', labelsize=14)
+    # Make major tick labels bigger and consistent across all subplots
+    ax.tick_params(axis='x', which='major', labelsize=16)
+    ax.tick_params(axis='y', which='major', labelsize=16)
 
-    # X-axis minor ticks (kept smaller but visible)
-    ax.tick_params(axis='x', which='minor', length=4, color='gray')
-    
+    # Minor ticks (kept smaller but visible) - keep a consistent labelsize if shown
+    ax.tick_params(axis='x', which='minor', length=4, color='gray', labelsize=16)
+    ax.tick_params(axis='y', which='minor', length=4, color='gray', labelsize=16)
+     
     # Optional: enable minor grid for better readability
     ax.grid(True, which='minor', linestyle=':', linewidth=0.5)
     ax.minorticks_on()
 
-plt.tight_layout(rect=[0, 0.03, 1, 0.97])
+plt.tight_layout(rect=(0, 0.03, 1, 0.97))
 # Save plot
 plt.savefig(OUTPUT_FILE, dpi=300)
 plt.close()

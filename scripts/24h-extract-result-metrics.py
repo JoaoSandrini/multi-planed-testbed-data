@@ -29,12 +29,12 @@ def calculate_statistics(data: List[float]) -> Dict[str, float]:
     
     return {
         'count': len(data),
-        'min': np.min(data_array),
-        'max': np.max(data_array),
-        'mean': np.mean(data_array),
-        'median': np.median(data_array),
-        'p90': np.percentile(data_array, 90),
-        'p95': np.percentile(data_array, 95)
+        'min': float(np.min(data_array)),
+        'max': float(np.max(data_array)),
+        'mean': float(np.mean(data_array)),
+        'median': float(np.median(data_array)),
+        'p90': float(np.percentile(data_array, 90)),
+        'p95': float(np.percentile(data_array, 95))
     }
 
 def read_csv_file(file_path: str) -> Tuple[List[float], str]:
@@ -138,26 +138,21 @@ def main():
     args = parser.parse_args()
     
     # Define preset file sets
-    base_path = os.path.dirname(os.path.abspath(__file__))
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    base_path = os.path.abspath(os.path.join(script_dir, '..'))  # go one folder up (repo root)
     
     presets = {
         '24h': [
-            os.path.join(base_path, 'data', '24h', '24h-bh-rj.csv'),
-            os.path.join(base_path, 'data', '24h', '24h-bh.csv'),
-            os.path.join(base_path, 'data', '24h', '24h-ip.csv'),
-            os.path.join(base_path, 'data', '24h', '24h-rj.csv')
-        ],
-        'phase0': [
-            os.path.join(base_path, 'data', 'phase0', 'times_raw_ip.csv'),
-            os.path.join(base_path, 'data', 'phase0', 'times_raw_polka.csv'),
-            os.path.join(base_path, 'data', 'phase0', 'times_treated_ip.csv'),
-            os.path.join(base_path, 'data', 'phase0', 'times_treated_polka.csv')
+            os.path.join(base_path, 'csv-data', '24h-polka-3.csv'),
+            os.path.join(base_path, 'csv-data', '24h-polka-2.csv'),
+            os.path.join(base_path, 'csv-data', '24h-ip.csv'),
+            os.path.join(base_path, 'csv-data', '24h-polka-1.csv')
         ],
         'stress': [
-            os.path.join(base_path, 'data', 'stress', 'stress-ip.csv'),
-            os.path.join(base_path, 'data', 'stress', 'stress-polka1.csv'),
-            os.path.join(base_path, 'data', 'stress', 'stress-polka2.csv'),
-            os.path.join(base_path, 'data', 'stress', 'stress-polka3.csv')
+            os.path.join(base_path, 'csv-data', 'stress-ip.csv'),
+            os.path.join(base_path, 'csv-data', 'stress-polka-1.csv'),
+            os.path.join(base_path, 'csv-data', 'stress-polka-2.csv'),
+            os.path.join(base_path, 'csv-data', 'stress-polka-3.csv')
         ]
     }
     

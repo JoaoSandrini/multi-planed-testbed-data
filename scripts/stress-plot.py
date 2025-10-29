@@ -12,10 +12,10 @@ sns.set_context("notebook", font_scale=1.35)
 colors = sns.color_palette("tab10")  # This gives: blue, orange, green, red, etc.
 
 # Carregar os dados dos testes de stress
-df_stress_ip = pd.read_csv('data/stress/stress-ip.csv')
-df_stress_polka1 = pd.read_csv('data/stress/stress-polka1.csv')
-df_stress_polka2 = pd.read_csv('data/stress/stress-polka2.csv')
-df_stress_polka3 = pd.read_csv('data/stress/stress-polka3.csv')
+df_stress_ip = pd.read_csv('csv-data/stress-ip.csv')
+df_stress_polka1 = pd.read_csv('csv-data/stress-polka-1.csv')
+df_stress_polka2 = pd.read_csv('csv-data/stress-polka-2.csv')
+df_stress_polka3 = pd.read_csv('csv-data/stress-polka-3.csv')
 
 # Filtrar dados para apenas até 20 minutos (1200 segundos)
 df_stress_ip = df_stress_ip[df_stress_ip['time'] <= 1200]
@@ -33,9 +33,9 @@ plt.plot(df_stress_polka3['time']/60, df_stress_polka3['avg'], label='PolKA 3: V
 
 
 # Adicionar rótulos e título
-plt.xlabel('Time (minutes)', fontsize=14)
-plt.ylabel('Average Throughput (Gb/s)', fontsize=14)
-plt.title('Average Throughput Comparison: IP vs PolKA 1, 2, 3', fontsize=20, fontweight='bold')
+plt.xlabel('Time (minutes)', fontsize=20)
+plt.ylabel('Average Throughput (Gb/s)', fontsize=20)
+plt.title('Average Throughput Comparison: IP vs PolKA 1, 2, 3', fontsize=24, fontweight='bold')
 
 plt.xticks(range(0, 21, 2))  # De 0 a 20 minutos, a cada 2 minutos
 
@@ -80,7 +80,7 @@ ax.tick_params(axis='both', which='major', labelsize=14, length=8, width=1.6, di
 ax.tick_params(axis='both', which='minor', labelsize=12, length=6, width=1.2, color='gray', direction='in')
 
 # Increase legend font size for consistency
-plt.legend(fontsize=12, loc='lower right')
+plt.legend(fontsize=18, loc='lower right')
 plt.grid(True, alpha=0.3)
 plt.tight_layout()
-plt.savefig('result-plots/phase1/stress.png', dpi=300, bbox_inches='tight')  # Save the figure
+plt.savefig('result-plots/stress.png', dpi=300, bbox_inches='tight')  # Save the figure
