@@ -1,0 +1,27 @@
+{
+  "@context": "https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.8.jsonld",
+  "id": "urn:ngsi-ld:ArtificialSensor:[N]",
+  "type": "ArtificialSensor",
+  "timestamp": {
+    "type": "Property",
+    "value": "2025-06-16T17:17:20.816Z"
+  },
+  "https://uri.etsi.org/ngsi-ld/name": {
+    "type": "Property",
+    "value": "Artificial Sensor [N]"
+  },
+  "https://uri.fiware.org/ns/data-models#peopleCount": {
+    "type": "Property",
+    "value": "[Value]"
+  },
+  "location": {
+    "type": "GeoProperty",
+    "value": {
+      "type": "Point",
+      "coordinates": [
+        "[Longitude]",
+        "[Latitude]"
+      ]
+    }
+  }
+}
